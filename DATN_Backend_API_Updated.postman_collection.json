@@ -1,0 +1,593 @@
+{
+  "info": {
+    "_postman_id": "datn-be-api-collection-v2",
+    "name": "DATN Backend APIs",
+    "description": "Complete API collection for DATN Backend - User Management, Product, Category, and Authentication",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"john_doe\",\n  \"password\": \"Password123!\",\n  \"confirmPassword\": \"Password123!\",\n  \"email\": \"john@example.com\",\n  \"fullName\": \"John Doe\",\n  \"phone\": \"0912345678\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/be-service/v1/user/register",
+              "host": ["{{base_url}}"],
+              "path": ["api", "be-service", "v1", "user", "register"]
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"john_doe\",\n  \"password\": \"Password123!\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/be-service/v1/user/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "be-service", "v1", "user", "login"]
+            }
+          }
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{refresh_token}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/be-service/v1/user/refresh-token",
+              "host": ["{{base_url}}"],
+              "path": ["api", "be-service", "v1", "user", "refresh-token"]
+            }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/be-service/v1/user/logout",
+              "host": ["{{base_url}}"],
+              "path": ["api", "be-service", "v1", "user", "logout"]
+            }
+          }
+        },
+        {
+          "name": "Test Auth",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/be-service/v1/user/test",
+              "host": ["{{base_url}}"],
+              "path": ["api", "be-service", "v1", "user", "test"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "User Management",
+      "item": [
+        {
+          "name": "Get Current User",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/be-service/v1/user/me",
+              "host": ["{{base_url}}"],
+              "path": ["api", "be-service", "v1", "user", "me"]
+            }
+          }
+        },
+        {
+          "name": "Get User by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/be-service/v1/user/550e8400-e29b-41d4-a716-446655440000",
+              "host": ["{{base_url}}"],
+              "path": ["api", "be-service", "v1", "user", "550e8400-e29b-41d4-a716-446655440000"]
+            }
+          }
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"newemail@example.com\",\n  \"fullName\": \"John Updated\",\n  \"phone\": \"0987654321\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/be-service/v1/user/update",
+              "host": ["{{base_url}}"],
+              "path": ["api", "be-service", "v1", "user", "update"]
+            }
+          }
+        },
+        {
+          "name": "Change Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"oldPassword\": \"Password123!\",\n  \"newPassword\": \"NewPassword456!\",\n  \"confirmPassword\": \"NewPassword456!\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/be-service/v1/user/change-password",
+              "host": ["{{base_url}}"],
+              "path": ["api", "be-service", "v1", "user", "change-password"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Category",
+      "item": [
+        {
+          "name": "Create Category",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Electronics\",\n  \"parentId\": null\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/be-service/v1/category/create",
+              "host": ["{{base_url}}"],
+              "path": ["api", "be-service", "v1", "category", "create"]
+            }
+          }
+        },
+        {
+          "name": "Get Category by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/be-service/v1/category/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "be-service", "v1", "category", "1"]
+            }
+          }
+        },
+        {
+          "name": "Get All Categories",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/be-service/v1/category/list",
+              "host": ["{{base_url}}"],
+              "path": ["api", "be-service", "v1", "category", "list"]
+            }
+          }
+        },
+        {
+          "name": "Get Root Categories",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/be-service/v1/category/root",
+              "host": ["{{base_url}}"],
+              "path": ["api", "be-service", "v1", "category", "root"]
+            }
+          }
+        },
+        {
+          "name": "Get Subcategories",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/be-service/v1/category/1/subcategories",
+              "host": ["{{base_url}}"],
+              "path": ["api", "be-service", "v1", "category", "1", "subcategories"]
+            }
+          }
+        },
+        {
+          "name": "Get All Categories with Hierarchy",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/be-service/v1/category/hierarchy/all",
+              "host": ["{{base_url}}"],
+              "path": ["api", "be-service", "v1", "category", "hierarchy", "all"]
+            }
+          }
+        },
+        {
+          "name": "Get Root Categories with Hierarchy",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/be-service/v1/category/hierarchy/root",
+              "host": ["{{base_url}}"],
+              "path": ["api", "be-service", "v1", "category", "hierarchy", "root"]
+            }
+          }
+        },
+        {
+          "name": "Update Category",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Electronics & Gadgets\",\n  \"parentId\": null\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/be-service/v1/category/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "be-service", "v1", "category", "1"]
+            }
+          }
+        },
+        {
+          "name": "Delete Category",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url}}/api/be-service/v1/category/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "be-service", "v1", "category", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Product",
+      "item": [
+        {
+          "name": "Create Product",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Laptop Dell XPS 13\",\n  \"sku\": \"DELL-XPS-13-001\",\n  \"description\": \"High-performance laptop\",\n  \"price\": 1299.99,\n  \"categoryId\": 1,\n  \"brand\": \"Dell\",\n  \"descriptionDetail\": {\n    \"processor\": \"Intel Core i7\",\n    \"ram\": \"16GB\",\n    \"storage\": \"512GB SSD\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/be-service/v1/product/create",
+              "host": ["{{base_url}}"],
+              "path": ["api", "be-service", "v1", "product", "create"]
+            }
+          }
+        },
+        {
+          "name": "Get Product by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/be-service/v1/product/550e8400-e29b-41d4-a716-446655440000",
+              "host": ["{{base_url}}"],
+              "path": ["api", "be-service", "v1", "product", "550e8400-e29b-41d4-a716-446655440000"]
+            }
+          }
+        },
+        {
+          "name": "Get All Products",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/be-service/v1/product/list?page=0&pageSize=10&sortBy=createdAt&sortDirection=DESC",
+              "host": ["{{base_url}}"],
+              "path": ["api", "be-service", "v1", "product", "list"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "pageSize",
+                  "value": "10"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "createdAt"
+                },
+                {
+                  "key": "sortDirection",
+                  "value": "DESC"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Search Products",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/be-service/v1/product/search?keyword=laptop&page=0&pageSize=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "be-service", "v1", "product", "search"],
+              "query": [
+                {
+                  "key": "keyword",
+                  "value": "laptop"
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "pageSize",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Products by Category",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/be-service/v1/product/category/1?page=0&pageSize=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "be-service", "v1", "product", "category", "1"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "pageSize",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Filter by Brand",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/be-service/v1/product/filter/brand?brand=Dell&page=0&pageSize=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "be-service", "v1", "product", "filter", "brand"],
+              "query": [
+                {
+                  "key": "brand",
+                  "value": "Dell"
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "pageSize",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Filter by Price Range",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/be-service/v1/product/filter/price?minPrice=500&maxPrice=1500&page=0&pageSize=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "be-service", "v1", "product", "filter", "price"],
+              "query": [
+                {
+                  "key": "minPrice",
+                  "value": "500"
+                },
+                {
+                  "key": "maxPrice",
+                  "value": "1500"
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "pageSize",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Filter by Status",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/be-service/v1/product/filter/status?status=ACTIVE&page=0&pageSize=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "be-service", "v1", "product", "filter", "status"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "ACTIVE"
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "pageSize",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Filter by Category & Price",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/be-service/v1/product/filter/category-price?categoryId=1&minPrice=1000&maxPrice=2000&page=0&pageSize=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "be-service", "v1", "product", "filter", "category-price"],
+              "query": [
+                {
+                  "key": "categoryId",
+                  "value": "1"
+                },
+                {
+                  "key": "minPrice",
+                  "value": "1000"
+                },
+                {
+                  "key": "maxPrice",
+                  "value": "2000"
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "pageSize",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Product",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Laptop Dell XPS 13 Plus\",\n  \"price\": 1399.99,\n  \"status\": \"ACTIVE\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/be-service/v1/product/550e8400-e29b-41d4-a716-446655440000",
+              "host": ["{{base_url}}"],
+              "path": ["api", "be-service", "v1", "product", "550e8400-e29b-41d4-a716-446655440000"]
+            }
+          }
+        },
+        {
+          "name": "Delete Product",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url}}/api/be-service/v1/product/550e8400-e29b-41d4-a716-446655440000",
+              "host": ["{{base_url}}"],
+              "path": ["api", "be-service", "v1", "product", "550e8400-e29b-41d4-a716-446655440000"]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8181",
+      "type": "string"
+    },
+    {
+      "key": "access_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "refresh_token",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}
+
