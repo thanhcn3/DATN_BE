@@ -6,9 +6,9 @@ spring:
   application:
     name: DATN_BE
   datasource:
-    url: ${POSTGRES_URL:jdbc:postgresql://localhost:5432/db_invest}
+    url: ${POSTGRES_URL:jdbc:postgresql://localhost:5432/postgres}
     username: ${POSTGRES_USER:postgres}
-    password: ${POSTGRES_PASSWORD:12345}
+    password: ${POSTGRES_PASSWORD:123456}
     hikari:
       schema: store
       auto-commit: true
@@ -26,6 +26,18 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: false
+  mail:
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:thanhcnps37081@fpt.edu.vn}
+    password: ${MAIL_PASSWORD:ldor aver bwwy ydll}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
 
 jwt:
   secret: ${JWT_SECRET:your-secret-key-change-in-production-env-this-is-very-important-keep-it-safe-and-secure}
@@ -42,3 +54,7 @@ vnpay:
   locale: vn
   currency: VND
 
+app:
+  mail:
+    from: ${MAIL_FROM:${MAIL_USERNAME:noreply@fpoly.edu.vn}}
+    frontend-url: ${FRONTEND_URL:http://localhost:5173}

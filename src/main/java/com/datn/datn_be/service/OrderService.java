@@ -9,6 +9,7 @@ import com.datn.datn_be.entity.OrderItem;
 import com.datn.datn_be.entity.Payment;
 import com.datn.datn_be.entity.PaymentMethod;
 import com.datn.datn_be.entity.ProductImage;
+import com.datn.datn_be.entity.User;
 import com.datn.datn_be.exception.ClientSideException;
 import com.datn.datn_be.repository.CartItemRepository;
 import com.datn.datn_be.repository.CartRepository;
@@ -18,6 +19,7 @@ import com.datn.datn_be.repository.PaymentMethodRepository;
 import com.datn.datn_be.repository.PaymentRepository;
 import com.datn.datn_be.repository.ProductImageRepository;
 import com.datn.datn_be.repository.ProductRepository;
+import com.datn.datn_be.repository.UserRepository;
 import com.datn.datn_be.util.JwtUtil;
 import com.datn.datn_be.util.VnpayUtil;
 import lombok.RequiredArgsConstructor;
@@ -48,6 +50,8 @@ public class OrderService {
     private final ProductRepository productRepository;
     private final ProductImageRepository productImageRepository;
     private final AdminNotificationService adminNotificationService;
+    private final EmailService emailService;
+    private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
     private final VnpayUtil vnpayUtil;
 
@@ -139,12 +143,9 @@ public class OrderService {
             payment.setStatus("WAITING");
             paymentRepository.save(payment);
         } else {
-            // COD: xác nhận đơn ngay
-            order.setStatus("CONFIRMED");
-            orderRepository.save(order);
+            // COD: giữ trạng thái PENDING, chờ admin xác nhận
             payment.setStatus("PENDING");
             paymentRepository.save(payment);
-            resp.setStatus("CONFIRMED");
         }
 
         // Notify admins immediately when a new order is created from webapp.
@@ -182,7 +183,7 @@ public class OrderService {
 
         boolean success = "00".equals(responseCode);
         if (success) {
-            order.setStatus("CONFIRMED");
+            // Thanh toán thành công: đơn vẫn PENDING, chờ admin xác nhận
             payment.setStatus("PAID");
             payment.setPaidAt(Instant.now());
         } else {
@@ -304,12 +305,16 @@ public class OrderService {
 
     /** Admin: cập nhật trạng thái bất kỳ đơn hàng */
     @Transactional
-    public OrderResponse updateOrderStatusAdmin(String orderId, String status) {
+    public OrderResponse updateOrderStatusAdmin(String orderId, String status, String authHeader) {
         Order order = orderRepository.findById(UUID.fromString(orderId))
                 .orElseThrow(() -> new ClientSideException(404, "Không tìm thấy đơn hàng"));
         if (status == null || status.isEmpty()) {
             throw new ClientSideException(400, "Trạng thái không hợp lệ");
         }
+
+        // Ghi lại thời điểm duyệt trước khi save
+        java.time.Instant approvedAt = "CONFIRMED".equalsIgnoreCase(status) ? java.time.Instant.now() : null;
+
         order.setStatus(status);
         orderRepository.save(order);
 
@@ -321,6 +326,25 @@ public class OrderService {
 
         List<OrderItemResponse> items = getOrderItems(order.getId());
         Payment payment = paymentRepository.findByOrderId(order.getId()).orElse(null);
+
+        // Gửi email xác nhận khi admin chuyển trạng thái sang CONFIRMED
+        if ("CONFIRMED".equalsIgnoreCase(status) && order.getUserId() != null) {
+            User buyer = userRepository.findById(order.getUserId()).orElse(null);
+
+            // Tra cứu admin đang duyệt từ JWT (nếu có)
+            User approver = null;
+            if (authHeader != null && !authHeader.isBlank()) {
+                try {
+                    UUID adminId = getUserIdFromHeader(authHeader);
+                    approver = userRepository.findById(adminId).orElse(null);
+                } catch (Exception ignored) {
+                    // Không bắt buộc phải có thông tin admin
+                }
+            }
+
+            emailService.sendOrderConfirmationEmail(buyer, order, items, approver, approvedAt);
+        }
+
         return mapOrder(order, items, payment != null ? payment.getStatus() : null);
     }
 

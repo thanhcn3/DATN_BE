@@ -122,10 +122,11 @@ public class OrderController {
     /** Admin: cập nhật trạng thái đơn hàng */
     @PutMapping("/{orderId}/status")
     public ResponseEntity<ApiResponse<OrderResponse>> updateOrderStatus(
+            @RequestHeader(value = "Authorization", required = false) String authHeader,
             @PathVariable String orderId,
             @RequestBody Map<String, String> body) {
         try {
-            OrderResponse resp = orderService.updateOrderStatusAdmin(orderId, body.get("status"));
+            OrderResponse resp = orderService.updateOrderStatusAdmin(orderId, body.get("status"), authHeader);
             return ResponseEntity.ok(new ApiResponse<>(0, "Cập nhật trạng thái thành công", resp));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
